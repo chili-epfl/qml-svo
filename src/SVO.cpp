@@ -28,7 +28,7 @@
 SVO::SVO(QQuickItem *parent) :
     QQuickItem(parent)
 {
-    cam = new vk::PinholeCamera(752, 480, 315.5, 315.5, 376.0, 240.0);
+    cam = new vk::PinholeCamera(640, 480, 356.0, 356.0, 320.0, 240.0);
     vo = new svo::FrameHandlerMono(cam);
     vo->start();
     timer.start();
@@ -40,10 +40,16 @@ SVO::~SVO()
 
 void SVO::setSourceImage(QVariant sourceImage)
 {
-    vo->addImage(sourceImage.value<cv::Mat>(), timer.elapsed()/1000.0);
-    Sophus::SE3 tf = vo->lastFrame()->T_f_w_;
-    qDebug() << tf.translation()[0] << " " << tf.translation()[1] << " " << tf.translation()[2];
-    qDebug() << tf.unit_quaternion().w() << " " << tf.unit_quaternion().x() << " " << tf.unit_quaternion().y() << " " << tf.unit_quaternion().z();
-    qDebug() << "***************************";
+    qDebug() << "Got frame";
+    cv::Mat yuvimg = sourceImage.value<cv::Mat>();
+    cv::Mat grayimg;
+    cv::cvtColor(yuvimg, grayimg, cv::COLOR_YUV2GRAY_NV21);
+    vo->addImage(grayimg, timer.elapsed()/1000.0);
+    if(vo->lastFrame() != NULL){
+        Sophus::SE3 tf = vo->lastFrame()->T_f_w_;
+        qDebug() << tf.translation()[0] << " " << tf.translation()[1] << " " << tf.translation()[2];
+        qDebug() << tf.unit_quaternion().w() << " " << tf.unit_quaternion().x() << " " << tf.unit_quaternion().y() << " " << tf.unit_quaternion().z();
+        qDebug() << "***************************";
+    }
 }
 

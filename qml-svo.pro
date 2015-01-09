@@ -16,10 +16,12 @@ TARGET = $$qtLibraryTarget($$TARGET)
 uri = SVO
 
 HEADERS += \
-    src/SVO.h
+    src/SVO.h \
+    src/SVOPlugin.h
 
 SOURCES += \
-    src/SVO.cpp
+    src/SVO.cpp \
+    src/SVOPlugin.cpp
 
 LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc
 LIBS += -lfast -lSophus -lvikit_common -lsvo
