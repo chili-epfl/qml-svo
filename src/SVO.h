@@ -30,8 +30,19 @@
 #include<QMatrix4x4>
 #include<QMetaType>
 #include<QMetaObject>
+#include<QElapsedTimer>
 
 #include<opencv2/core/core.hpp>
+
+#include<sophus/se3.h>
+
+#include<vikit/abstract_camera.h>
+#include<vikit/pinhole_camera.h>
+
+#include<svo/global.h>
+#include<svo/frame.h>
+#include<svo/frame_handler_base.h>
+#include<svo/frame_handler_mono.h>
 
 Q_DECLARE_METATYPE(cv::Mat)
 
@@ -70,6 +81,10 @@ signals:
 private slots:
 
 private:
+
+    QElapsedTimer timer;
+    vk::AbstractCamera* cam;
+    svo::FrameHandlerMono* vo;
 
 };
 

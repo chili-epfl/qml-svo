@@ -28,6 +28,10 @@
 SVO::SVO(QQuickItem *parent) :
     QQuickItem(parent)
 {
+    cam = new vk::PinholeCamera(752, 480, 315.5, 315.5, 376.0, 240.0);
+    vo = new svo::FrameHandlerMono(cam);
+    vo->start();
+    timer.start();
 }
 
 SVO::~SVO()
@@ -36,5 +40,10 @@ SVO::~SVO()
 
 void SVO::setSourceImage(QVariant sourceImage)
 {
+    vo->addImage(sourceImage.value<cv::Mat>(), timer.elapsed()/1000.0);
+    Sophus::SE3 tf = vo->lastFrame()->T_f_w_;
+    qDebug() << tf.translation()[0] << " " << tf.translation()[1] << " " << tf.translation()[2];
+    qDebug() << tf.unit_quaternion().w() << " " << tf.unit_quaternion().x() << " " << tf.unit_quaternion().y() << " " << tf.unit_quaternion().z();
+    qDebug() << "***************************";
 }
 
