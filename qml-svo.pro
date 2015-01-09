@@ -17,11 +17,13 @@ uri = SVO
 
 HEADERS += \
     src/SVO.h \
-    src/SVOPlugin.h
+    src/SVOPlugin.h \
+    src/SVOThread.h
 
 SOURCES += \
     src/SVO.cpp \
-    src/SVOPlugin.cpp
+    src/SVOPlugin.cpp \
+    src/SVOThread.cpp
 
 LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc
 LIBS += -lfast -lSophus -lvikit_common -lsvo

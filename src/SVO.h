@@ -44,6 +44,8 @@
 #include<svo/frame_handler_base.h>
 #include<svo/frame_handler_mono.h>
 
+#include"SVOThread.h"
+
 Q_DECLARE_METATYPE(cv::Mat)
 
 /**
@@ -85,7 +87,7 @@ private:
     QElapsedTimer timer;
     vk::AbstractCamera* cam;
     svo::FrameHandlerMono* vo;
-
+    SVOThread* thread;
 };
 
 #endif // SVO_H

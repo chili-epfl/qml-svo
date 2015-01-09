@@ -30,26 +30,23 @@ SVO::SVO(QQuickItem *parent) :
 {
     cam = new vk::PinholeCamera(640, 480, 356.0, 356.0, 320.0, 240.0);
     vo = new svo::FrameHandlerMono(cam);
-    vo->start();
-    timer.start();
+    thread = new SVOThread(vo);
+    thread->start();
 }
 
 SVO::~SVO()
 {
+    thread->stop();
+    delete thread;
+    delete vo;
+    delete cam;
 }
 
 void SVO::setSourceImage(QVariant sourceImage)
 {
-    qDebug() << "Got frame";
     cv::Mat yuvimg = sourceImage.value<cv::Mat>();
     cv::Mat grayimg;
     cv::cvtColor(yuvimg, grayimg, cv::COLOR_YUV2GRAY_NV21);
-    vo->addImage(grayimg, timer.elapsed()/1000.0);
-    if(vo->lastFrame() != NULL){
-        Sophus::SE3 tf = vo->lastFrame()->T_f_w_;
-        qDebug() << tf.translation()[0] << " " << tf.translation()[1] << " " << tf.translation()[2];
-        qDebug() << tf.unit_quaternion().w() << " " << tf.unit_quaternion().x() << " " << tf.unit_quaternion().y() << " " << tf.unit_quaternion().z();
-        qDebug() << "***************************";
-    }
+    thread->presentFrame(grayimg);
 }
 
